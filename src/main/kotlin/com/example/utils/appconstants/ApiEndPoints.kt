@@ -3,6 +3,7 @@ package com.example.utils.appconstants
 object ApiEndPoints {
     const val USER_ROUTE="user"
     const val USER_REGISTRATION="/register"
+    const val USER_LOGIN="/login"
 
     const val WATCHLIST_ROUTE="watchList"
     const val CREATE_WATCHLIST="/create"

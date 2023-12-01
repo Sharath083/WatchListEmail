@@ -1,5 +1,6 @@
 package com.example.entity
 
+import com.example.database.table.RecentWatchList
 import com.example.database.table.User
 import com.example.database.table.WatchList
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -11,7 +12,7 @@ class RecentWatchListEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     companion object : UUIDEntityClass<RecentWatchListEntity>(WatchList)
 
-    var userId by UserEntity referencedOn User.id
-    var watchListId by WatchListEntity referencedOn WatchList.id
+    var userId by  RecentWatchList.userId
+    var watchListId by RecentWatchList.watchListId
 
 }

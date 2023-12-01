@@ -11,10 +11,11 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    configureKoin()
+    configureSecurity()
     configureSerialization()
     configureRequestValidation()
     configureRouting()
     DatabaseFactory.init()
     configureStatusPages()
-    configureKoin()
 }

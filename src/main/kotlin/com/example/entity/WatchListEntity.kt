@@ -8,9 +8,10 @@ import java.util.*
 
 class WatchListEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<WatchListEntity>(WatchList)
-    var userId by UserEntity referencedOn WatchList.userId
+    var userId by WatchList.userId
     var watchListName by WatchList.watchListName
     var createdAt by WatchList.createdAt
     var updatedAt by WatchList.updatedAt
+    var isDelete by WatchList.is_delete
     var symbols by WatchList.symbols
 }

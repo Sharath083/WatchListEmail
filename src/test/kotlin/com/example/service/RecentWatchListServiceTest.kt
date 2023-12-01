@@ -1,11 +1,12 @@
 package com.example.service
 
 import com.example.utils.H2Database
-import com.example.utils.TestInputs
 import com.example.database.table.RecentWatchList
 import com.example.database.table.User
 import com.example.database.table.WatchList
 import com.example.di.myModule
+import com.example.service.RecentWatchListService
+import com.example.utils.TestInputs
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -44,13 +45,13 @@ class RecentWatchListServiceTest {
     }
     @Test
     fun getRecentWatchListServiceTest():Unit= runBlocking {
-        recentWatchListService.getRecentWatchListService(TestInputs.recentWatchlistData).apply {
+        recentWatchListService.getRecentWatchListService("TestInputs.recentWatchlistData").apply {
             assertTrue(this.symbol.isNotEmpty())
         }
     }
     @Test
     fun getAllWatchListServiceTest():Unit= runBlocking {
-        recentWatchListService.getAllWatchListService(TestInputs.recentWatchlistData).apply {
+        recentWatchListService.getAllWatchListService("TestInputs.recentWatchlistData").apply {
             assertTrue(this.isNotEmpty())
         }
     }

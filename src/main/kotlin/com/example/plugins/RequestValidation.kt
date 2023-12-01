@@ -40,8 +40,7 @@ fun Application.configureRequestValidation(){
         }
         validate<DeleteWatchlist> {
             when{
-                it.userId.isNullOrBlank()->ValidationResult.Invalid("UserId must not be blank")
-                it.watchlistId.isNullOrBlank()->ValidationResult.Invalid("WatchListId must not be blank")
+                it.watchlistName.isNullOrBlank()->ValidationResult.Invalid("WatchListId must not be blank")
                 else->ValidationResult.Valid
             }
         }

@@ -5,8 +5,6 @@ import com.example.database.DatabaseFactory
 import com.example.database.table.WatchList
 import com.example.exceptions.CommonException
 import com.example.model.RecentWatchListResponse
-import com.example.model.RecentWatchlistData
-import com.example.model.Symbol
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -16,8 +14,8 @@ import java.util.*
 import kotlin.collections.List
 
 class RecentWatchListDaoImpl : RecentWatchListDao {
-    override suspend fun getRecentWatchList(recentWatchlistData: RecentWatchlistData): RecentWatchListResponse {
-        val userUid = UUID.fromString(recentWatchlistData.userId)
+    override suspend fun getRecentWatchList(uuid: String): RecentWatchListResponse {
+        val userUid = UUID.fromString(uuid)
         return try {
             DatabaseFactory.dbQuery {
                 val data=WatchList.slice(WatchList.symbols,WatchList.watchListName)
@@ -32,8 +30,8 @@ class RecentWatchListDaoImpl : RecentWatchListDao {
         }
     }
 
-    override suspend fun getAllWatchList(recentWatchlistData: RecentWatchlistData): List<RecentWatchListResponse> {
-        val userUid = UUID.fromString(recentWatchlistData.userId)
+    override suspend fun getAllWatchList(uuid: String): List<RecentWatchListResponse> {
+        val userUid = UUID.fromString(uuid)
         return try {
             DatabaseFactory.dbQuery {
                 WatchList.slice(WatchList.symbols,WatchList.watchListName)

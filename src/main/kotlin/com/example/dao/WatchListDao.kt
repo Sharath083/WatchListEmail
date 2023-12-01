@@ -6,7 +6,9 @@ import com.example.model.WatchlistData
 import java.util.*
 
 interface WatchListDao {
-    suspend fun createWatchList(watchlistData: WatchlistData): UUID
-    suspend fun updateWatchList(updateWatchList: UpdateWatchList):Boolean
-    suspend fun deleteWatchList(deleteWatchlist: DeleteWatchlist):Boolean
+    suspend fun createWatchList(watchlistData: WatchlistData,uuid:String): UUID
+    suspend fun updateWatchList(updateWatchList: UpdateWatchList,uuid:String):Boolean
+    suspend fun deleteWatchList(deleteWatchlist: DeleteWatchlist,uuid:String):Boolean
+    suspend fun getWatchlistCountAndSameNameWatchlistCount(accountId: String, watchlistName: String) :Int
+
 }

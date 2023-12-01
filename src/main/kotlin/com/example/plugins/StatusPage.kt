@@ -17,7 +17,7 @@ fun Application.configureStatusPages() {
         exception<Exception>{ call, cause ->
             when(cause){
                 is RequestValidationException->{
-                    statusCode= HttpStatusCode.BadRequest
+                    statusCode= HttpStatusCode.Unauthorized
                     message=cause.reasons.joinToString()
                     status="400 Bad Request"
                 }

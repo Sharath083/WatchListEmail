@@ -32,7 +32,7 @@ class HelperMethods: KoinComponent {
     fun validateWatchlistCreation(watchlistData: WatchlistData): ValidationResult {
         with(watchlistData) {
             return when {
-                userId.isNullOrBlank() -> ValidationResult.Invalid("User ID must not be blank")
+                this.watchListName.isEmpty() -> ValidationResult.Invalid("WatchList Name must not be blank")
                 else -> validateSymbols(symbols)
             }
         }
@@ -62,8 +62,7 @@ class HelperMethods: KoinComponent {
     fun validateUpdateWatchlistCreation(details: UpdateWatchList): ValidationResult {
         with(details) {
             return when {
-                userId.isNullOrBlank() -> ValidationResult.Invalid("User ID must not be blank")
-                watchListId.isNullOrBlank()->ValidationResult.Invalid("Watch ID must not be blank")
+                watchListName.isBlank()->ValidationResult.Invalid("Watch ID must not be blank")
                 else -> validateSymbols(symbols)
             }
         }

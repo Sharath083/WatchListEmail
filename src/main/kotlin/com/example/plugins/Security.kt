@@ -1,55 +1,46 @@
 package com.example.plugins
 
+import com.example.exceptions.CommonException
+import com.example.redis.RedisSessionStorage
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import io.ktor.util.*
+import org.koin.ktor.ext.inject
+
+data class UserSession(val accountId: String) : Principal
 
 fun Application.configureSecurity() {
-    data class MySession(val count: Int = 0)
+    val redisSessionStorage by inject<RedisSessionStorage>()
+
     install(Sessions) {
-        cookie<MySession>("MY_SESSION") {
-            cookie.extensions["SameSite"] = "lax"
+        val secretHexEncryptKey = hex("00112233445566778899aabbccddeeff")
+        val secretHexSignKey = hex("6819b57a326945c1968f45236589")
+
+        cookie<UserSession>("userSession", redisSessionStorage) {
+            transform(SessionTransportTransformerEncrypt(secretHexEncryptKey, secretHexSignKey))
         }
     }
-    authentication {
-        basic(name = "myauth1") {
-            realm = "Ktor Server"
-            validate { credentials ->
-                if (credentials.name == credentials.password) {
-                    UserIdPrincipal(credentials.name)
+    install(Authentication) {
+        session<UserSession>("AUTH_SESSION") {
+            validate { session ->
+                if (session.accountId.isNotEmpty()) {
+                    session
                 } else {
                     null
                 }
             }
-        }
-    
-        form(name = "myauth2") {
-            userParamName = "user"
-            passwordParamName = "password"
             challenge {
-                /**/
+                throw CommonException(
+                    "WatchlistConstants.INVALID_SESSION",
+                    HttpStatusCode.Unauthorized
+                )
             }
         }
     }
-    routing {
-        get("/session/increment") {
-                val session = call.sessions.get<MySession>() ?: MySession()
-                call.sessions.set(session.copy(count = session.count + 1))
-                call.respondText("Counter is ${session.count}. Refresh to increment.")
-            }
-        authenticate("myauth1") {
-            get("/protected/route/basic") {
-                val principal = call.principal<UserIdPrincipal>()!!
-                call.respondText("Hello ${principal.name}")
-            }
-        }
-        authenticate("myauth2") {
-            get("/protected/route/form") {
-                val principal = call.principal<UserIdPrincipal>()!!
-                call.respondText("Hello ${principal.name}")
-            }
-        }
-    }
+
+
 }
