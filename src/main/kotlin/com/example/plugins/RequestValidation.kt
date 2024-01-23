@@ -20,18 +20,18 @@ fun Application.configureRequestValidation(){
                 else->ValidationResult.Valid
             }
         }
-        validate<WatchlistData>{
-            when(val result=helperFunction.validateWatchlistCreation(it)){
-                is ValidationResult.Invalid -> result
-                else -> ValidationResult.Valid
-            }
-        }
-        validate<UpdateWatchList> {
-            when(val result=helperFunction.validateUpdateWatchlistCreation(it)){
-                is ValidationResult.Invalid -> result
-                else->ValidationResult.Valid
-            }
-        }
+//        validate<WatchlistData>{
+//            when(val result=helperFunction.validateWatchlistCreation(it)){
+//                is ValidationResult.Invalid -> result
+//                else -> ValidationResult.Valid
+//            }
+//        }
+//        validate<UpdateWatchList> {
+//            when(val result=helperFunction.validateUpdateWatchlistCreation(it)){
+//                is ValidationResult.Invalid -> result
+//                else->ValidationResult.Valid
+//            }
+//        }
         validate<RecentWatchlistData> {
             when{
                 it.userId.isNullOrBlank()->ValidationResult.Invalid("UserId must not be blank")

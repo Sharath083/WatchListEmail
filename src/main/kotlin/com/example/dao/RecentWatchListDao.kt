@@ -7,5 +7,4 @@ import java.util.UUID
 
 interface RecentWatchListDao {
     suspend fun getRecentWatchList(uuid: String): RecentWatchListResponse
-    suspend fun getAllWatchList(uuid: String): List<RecentWatchListResponse>
 }

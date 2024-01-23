@@ -65,6 +65,21 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
 
+    //pdf  and xml
+
+    implementation("com.itextpdf:itextpdf:5.5.13.3")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.sun.xml.bind:jaxb-core:2.3.0.1")
+    implementation("com.sun.xml.bind:jaxb-impl:2.3.3")
+
+    //gmail
+    implementation("org.apache.commons:commons-email:1.5")
+//    implementation("com.sun.mail:jakarta.mail:2.0.1")
+//    implementation("com.sun.mail:javax.mail:1.6.2")
+
+
+
+
 
     testImplementation("io.mockk:mockk:$mockk_version")
 

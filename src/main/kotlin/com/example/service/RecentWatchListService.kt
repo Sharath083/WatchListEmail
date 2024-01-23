@@ -22,18 +22,18 @@ class RecentWatchListService:KoinComponent {
         }
 
     }
-    suspend fun getAllWatchListService(uuid: String):List<RecentWatchListResponse>{
-        try {
-            recentWatchListDaoImpl.getAllWatchList(uuid).apply {
-                return this
-            }
-        }catch (e:NoSuchElementException){
-            throw CommonException(
-                msg = "Watch list is empty",
-                statusCode = HttpStatusCode.InternalServerError
-            )
-        }
-
-    }
+//    suspend fun getAllWatchListService(uuid: String):List<RecentWatchListResponse>{
+//        try {
+//            recentWatchListDaoImpl.getAllWatchList(uuid).apply {
+//                return this
+//            }
+//        }catch (e:NoSuchElementException){
+//            throw CommonException(
+//                msg = "Watch list is empty",
+//                statusCode = HttpStatusCode.InternalServerError
+//            )
+//        }
+//
+//    }
 
 }

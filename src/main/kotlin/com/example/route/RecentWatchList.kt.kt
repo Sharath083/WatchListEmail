@@ -24,12 +24,7 @@ fun Route.recentWatchList(){
                     call.respond(HttpStatusCode.OK, this)
                 }
             }
-            get(GET_ALL_WATCHLIST) {
-                val details = call.receive<RecentWatchlistData>()
-                recentWatchListService.getAllWatchListService(call.principal<UserSession>()!!.accountId).apply {
-                    call.respond(HttpStatusCode.OK, this)
-                }
-            }
+
         }
     }
 }

@@ -29,14 +29,14 @@ class HelperMethods: KoinComponent {
             }
         }
     }
-    fun validateWatchlistCreation(watchlistData: WatchlistData): ValidationResult {
-        with(watchlistData) {
-            return when {
-                this.watchListName.isEmpty() -> ValidationResult.Invalid("WatchList Name must not be blank")
-                else -> validateSymbols(symbols)
-            }
-        }
-    }
+//    fun validateWatchlistCreation(watchlistData: WatchlistData): ValidationResult {
+//        with(watchlistData) {
+//            return when {
+//                this.watchListName.isBlank() -> ValidationResult.Invalid("WatchList Name must not be blank")
+//                else -> validateSymbols(symbols)
+//            }
+//        }
+//    }
     private fun validateSymbols(symbols: List<Symbol>): ValidationResult {
         return when {
             symbols.isEmpty() -> ValidationResult.Invalid("Symbols list must not be empty")

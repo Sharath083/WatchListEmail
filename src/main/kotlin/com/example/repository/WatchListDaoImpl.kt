@@ -4,13 +4,13 @@ import com.example.dao.WatchListDao
 import com.example.database.DatabaseFactory
 import com.example.database.table.RecentWatchList
 import com.example.database.table.WatchList
-import com.example.database.table.WatchList.is_delete
 import com.example.database.table.WatchList.userId
 import com.example.database.table.WatchList.watchListName
 import com.example.entity.RecentWatchListEntity
 import com.example.entity.WatchListEntity
 import com.example.exceptions.CommonException
 import com.example.model.DeleteWatchlist
+import com.example.model.RecentWatchListResponse
 import com.example.model.UpdateWatchList
 import com.example.model.WatchlistData
 import io.ktor.http.*
@@ -35,12 +35,12 @@ class WatchListDaoImpl : WatchListDao {
                     createdAt=Instant.now().toString()
                     updatedAt=Instant.now().toString()
                     isDelete=false
-                    symbols=symbol
+                    symbols= symbol
                 }.id.value
-                RecentWatchListEntity.new{
-                    userId = userUid
-                    watchListId = data
-                }
+//                RecentWatchListEntity.new{
+//                    userId = userUid
+//                    watchListId = data
+//                }
                 data
             }
         } catch (e: ExposedSQLException) {
@@ -86,7 +86,7 @@ class WatchListDaoImpl : WatchListDao {
         val userUid=UUID.fromString(uuid)
         return try {
             DatabaseFactory.dbQuery {
-                RecentWatchList.deleteWhere { WatchList.userId eq userUid and (watchListName eq deleteWatchlist.watchlistName!!) }
+//                RecentWatchList.deleteWhere { WatchList.userId eq userUid and (watchListName eq deleteWatchlist.watchlistName!!) }
 
                 WatchList.update({
                     userId eq userUid and (watchListName eq deleteWatchlist.watchlistName!!)
@@ -98,6 +98,21 @@ class WatchListDaoImpl : WatchListDao {
             throw CommonException("Unable to delete WatchList", HttpStatusCode.InternalServerError)
         }
     }
+    override suspend fun getAllWatchList(uuid: String): List<RecentWatchListResponse> {
+        val userUid = UUID.fromString(uuid)
+        return try {
+            DatabaseFactory.dbQuery {
+                WatchList.slice(WatchList.symbols,WatchList.watchListName)
+                    .select(WatchList.userId eq userUid and (WatchList.is_delete eq false))
+                    .map {
+                        RecentWatchListResponse(it[watchListName]!! , Json.decodeFromString(it[WatchList.symbols]!!) )
+                    }
+            }
+        }catch (e:Exception){
+            throw CommonException("Unable to Fetch  WatchList", HttpStatusCode.InternalServerError)
+        }
+    }
+
 
 
 }

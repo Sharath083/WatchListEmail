@@ -1,6 +1,7 @@
 package com.example.dao
 
 import com.example.model.DeleteWatchlist
+import com.example.model.RecentWatchListResponse
 import com.example.model.UpdateWatchList
 import com.example.model.WatchlistData
 import java.util.*
@@ -10,5 +11,5 @@ interface WatchListDao {
     suspend fun updateWatchList(updateWatchList: UpdateWatchList,uuid:String):Boolean
     suspend fun deleteWatchList(deleteWatchlist: DeleteWatchlist,uuid:String):Boolean
     suspend fun getWatchlistCountAndSameNameWatchlistCount(accountId: String, watchlistName: String) :Int
-
+    suspend fun getAllWatchList(uuid: String): List<RecentWatchListResponse>
 }

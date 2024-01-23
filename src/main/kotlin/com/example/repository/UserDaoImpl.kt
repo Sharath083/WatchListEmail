@@ -2,6 +2,7 @@ package com.example.repository
 
 import com.example.dao.UserDao
 import com.example.database.DatabaseFactory
+import com.example.database.table.User
 import com.example.database.table.User.gmail
 import com.example.database.table.User.password
 import com.example.database.table.User.userName
@@ -29,6 +30,16 @@ class UserDaoImpl : UserDao {
             }
         }catch (e:ExposedSQLException){
             throw CommonException("Unable to Create User", HttpStatusCode.BadRequest)
+        }
+    }
+    suspend fun getUserGmail(uuid:String):String{
+        try {
+            return DatabaseFactory.dbQuery {
+                UserEntity.find { User.id eq (UUID.fromString(uuid))
+                }.single().gmail
+            }
+        }catch (e:ExposedSQLException){
+            throw CommonException("Unable to Get Gmail", HttpStatusCode.BadRequest)
         }
     }
 

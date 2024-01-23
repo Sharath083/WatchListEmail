@@ -23,25 +23,11 @@ class RecentWatchListDaoImpl : RecentWatchListDao {
                     .orderBy(WatchList.createdAt)
                     .map { it[WatchList.watchListName] to it[WatchList.symbols] }
                     .last()
-                RecentWatchListResponse(data.first,Json.decodeFromString(data.second))
+                RecentWatchListResponse(data.first!!,Json.decodeFromString(data.second!!))
             }
         }catch (e:Exception){
             throw CommonException("Unable to Fetch Recent WatchList", HttpStatusCode.InternalServerError)
         }
     }
 
-    override suspend fun getAllWatchList(uuid: String): List<RecentWatchListResponse> {
-        val userUid = UUID.fromString(uuid)
-        return try {
-            DatabaseFactory.dbQuery {
-                WatchList.slice(WatchList.symbols,WatchList.watchListName)
-                    .select(WatchList.userId eq userUid and (WatchList.is_delete eq false))
-                    .map {
-                        RecentWatchListResponse(it[WatchList.watchListName] , Json.decodeFromString(it[WatchList.symbols]) )
-                    }
-            }
-        }catch (e:Exception){
-            throw CommonException("Unable to Fetch  WatchList", HttpStatusCode.InternalServerError)
-        }
-    }
 }

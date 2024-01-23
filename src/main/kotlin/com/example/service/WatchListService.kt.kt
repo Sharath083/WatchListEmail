@@ -18,25 +18,23 @@ class WatchListService:KoinComponent {
     suspend fun createWatchListService(watchlistData: WatchlistData,uuid:String):SuccessResponse{
         try {
 
-            val sameWatchlistCount = watchListDaoImpl
-                .getWatchlistCountAndSameNameWatchlistCount(uuid, watchlistData.watchListName)
-
-
-
-            if (sameWatchlistCount > 0) {
-                throw CommonException(
-                    "InfoMessage.WATCHLIST_NAME_EXISTS",
-                    HttpStatusCode.Conflict
-                )
-
-            }
+//            val sameWatchlistCount = watchListDaoImpl
+//                .getWatchlistCountAndSameNameWatchlistCount(uuid, watchlistData.watchListName)
+//
+//
+//
+//            if (sameWatchlistCount > 0) {
+//                throw CommonException(
+//                    "InfoMessage.WATCHLIST_NAME_EXISTS",
+//                    HttpStatusCode.Conflict
+//                )
+//            }
             watchListDaoImpl.createWatchList(watchlistData,uuid)
                 return SuccessResponse("WatchList Created", HttpStatusCode.Created.toString())
 
         }catch (e:ExposedSQLException){
             throw CommonException(msg ="DATABASE_EXPOSED_SQL_ERROR",HttpStatusCode.InternalServerError)
         }
-
 
     }
     suspend fun updateWatchListService(updateWatchList: UpdateWatchList,uuid: String):SuccessResponse{

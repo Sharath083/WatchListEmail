@@ -7,7 +7,7 @@ import redis.clients.jedis.Jedis
 import redis.clients.jedis.exceptions.JedisConnectionException
 
 class RedisSessionStorage(private val redisClient: Jedis) : SessionStorage {
-    private val REDIS_TTL: Long = 60 * 60* 1 * 1
+    private val REDIS_TTL: Long = 60 * 60* 24 * 1000
     private val tag = RedisSessionStorage::class.qualifiedName
 
     override suspend fun invalidate(id: String) {

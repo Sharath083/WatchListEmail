@@ -21,6 +21,7 @@ object DatabaseFactory {
             password = DBConfig.password
         )
         transaction {
+//            SchemaUtils.drop(User, WatchList, RecentWatchList)
             SchemaUtils.createMissingTablesAndColumns(User, WatchList, RecentWatchList)
         }
     }
