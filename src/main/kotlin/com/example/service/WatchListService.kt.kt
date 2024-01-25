@@ -5,6 +5,7 @@ import com.example.model.DeleteWatchlist
 import com.example.model.SuccessResponse
 import com.example.model.UpdateWatchList
 import com.example.model.WatchlistData
+import com.example.repository.RecentWatchListDaoImpl
 import com.example.repository.WatchListDaoImpl
 import io.ktor.http.*
 import org.jetbrains.exposed.exceptions.ExposedSQLException
@@ -13,24 +14,22 @@ import org.koin.core.component.inject
 
 class WatchListService:KoinComponent {
     private val watchListDaoImpl by inject<WatchListDaoImpl>()
+    private val recentWatchListDaoImpl by inject<RecentWatchListDaoImpl>()
 
 
     suspend fun createWatchListService(watchlistData: WatchlistData,uuid:String):SuccessResponse{
         try {
+            val sameWatchlistCount = watchListDaoImpl
+                .getWatchlistCountAndSameNameWatchlistCount(uuid, watchlistData.watchListName)
 
-//            val sameWatchlistCount = watchListDaoImpl
-//                .getWatchlistCountAndSameNameWatchlistCount(uuid, watchlistData.watchListName)
-//
-//
-//
-//            if (sameWatchlistCount > 0) {
-//                throw CommonException(
-//                    "InfoMessage.WATCHLIST_NAME_EXISTS",
-//                    HttpStatusCode.Conflict
-//                )
-//            }
+            if (sameWatchlistCount > 0) {
+                throw CommonException(
+                    "WATCHLIST_NAME_EXISTS",
+                    HttpStatusCode.Conflict
+                )
+            }
             watchListDaoImpl.createWatchList(watchlistData,uuid)
-                return SuccessResponse("WatchList Created", HttpStatusCode.Created.toString())
+            return SuccessResponse("WatchList Created", HttpStatusCode.Created.toString())
 
         }catch (e:ExposedSQLException){
             throw CommonException(msg ="DATABASE_EXPOSED_SQL_ERROR",HttpStatusCode.InternalServerError)
@@ -39,13 +38,12 @@ class WatchListService:KoinComponent {
     }
     suspend fun updateWatchListService(updateWatchList: UpdateWatchList,uuid: String):SuccessResponse{
         try {
-
             val sameWatchlistCount = watchListDaoImpl
                 .getWatchlistCountAndSameNameWatchlistCount(uuid, updateWatchList.watchListName)
 
             if (sameWatchlistCount == 0) {
                 throw CommonException(
-                    "InfoMessage.WATCHLIST_NOT_FOUND",
+                    "WATCHLIST_NOT_FOUND",
                     HttpStatusCode.Conflict
                 )
             }

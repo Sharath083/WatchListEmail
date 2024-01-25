@@ -9,4 +9,5 @@ interface UserDao {
     suspend fun userRegistration(details: UserRegistration): UUID
     suspend fun checkUser(name: String, email: String): Boolean
     suspend fun userLoginCheck(input: LoginData): String
+
 }

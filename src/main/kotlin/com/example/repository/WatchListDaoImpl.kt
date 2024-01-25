@@ -25,11 +25,11 @@ import java.util.*
 
 class WatchListDaoImpl : WatchListDao {
     override suspend fun createWatchList(watchlistData: WatchlistData,uuid:String):UUID {
-        return try {
+        try {
             val symbol = Json.encodeToString(watchlistData.symbols)
             val userUid = UUID.fromString(uuid)
-            DatabaseFactory.dbQuery {
-                val data =WatchListEntity.new {
+            return DatabaseFactory.dbQuery {
+                val data=WatchListEntity.new {
                     userId=userUid
                     watchListName=watchlistData.watchListName
                     createdAt=Instant.now().toString()
@@ -37,10 +37,10 @@ class WatchListDaoImpl : WatchListDao {
                     isDelete=false
                     symbols= symbol
                 }.id.value
-//                RecentWatchListEntity.new{
-//                    userId = userUid
-//                    watchListId = data
-//                }
+                RecentWatchList.insert {
+                    it[userId]=userUid
+                    it[watchListId]= data
+                }
                 data
             }
         } catch (e: ExposedSQLException) {
@@ -76,7 +76,7 @@ class WatchListDaoImpl : WatchListDao {
                 }>0
             }
         }catch (e:ExposedSQLException){
-            throw CommonException("Unable to Update WatchLis                                                        t", HttpStatusCode.InternalServerError)
+            throw CommonException("Unable to Update WatchList", HttpStatusCode.InternalServerError)
         }
     }
 
@@ -86,7 +86,8 @@ class WatchListDaoImpl : WatchListDao {
         val userUid=UUID.fromString(uuid)
         return try {
             DatabaseFactory.dbQuery {
-//                RecentWatchList.deleteWhere { WatchList.userId eq userUid and (watchListName eq deleteWatchlist.watchlistName!!) }
+                RecentWatchList.deleteWhere { WatchList.userId eq userUid and (
+                        watchListName eq deleteWatchlist.watchlistName!!) }
 
                 WatchList.update({
                     userId eq userUid and (watchListName eq deleteWatchlist.watchlistName!!)

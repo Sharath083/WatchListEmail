@@ -3,6 +3,8 @@ package com.example.route
 import com.example.model.LoginData
 import com.example.model.UserRegistration
 import com.example.redis.RedisHelper
+import com.example.redis.getSession
+import com.example.redis.setResponseHeader
 import com.example.service.UserLoginService
 import com.example.service.UserServices
 import com.example.utils.appconstants.ApiEndPoints.USER_LOGIN
@@ -31,8 +33,13 @@ fun Route.userRouting(){
             val details=call.receive<LoginData>()
             userLoginService.userLoginService(details).apply {
                 redisHelper.set(details.name, this.uuid)
-                call.response.header("Session", "${details.name}|${this.uuid}")
+                call.setResponseHeader("Session", "${details.name}|${this.uuid}")
                 call.respond(HttpStatusCode.Created,this)
+            }
+        }
+        post("/logout") {
+            userLoginService.userLogoutService(call.getSession().first).apply {
+                call.respond(HttpStatusCode.OK,this)
             }
         }
     }

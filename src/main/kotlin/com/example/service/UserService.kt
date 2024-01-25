@@ -17,7 +17,6 @@ class UserServices : KoinComponent {
                 val uuid = userDaoImpl.userRegistration(details)
                 UserResponse(uuid.toString(), HttpStatusCode.Created.toString())
             }
-
             else ->
                 throw InvalidRegisterDetails(
                     "${details.name} or ${details.email} Already Exists ",

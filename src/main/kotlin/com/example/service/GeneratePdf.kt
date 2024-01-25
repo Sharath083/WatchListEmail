@@ -28,7 +28,7 @@ class GeneratePdf {
 
             val pageSize = document.pageSize
 
-            
+            val isLandscape = pageSize.width > pageSize.height
 
             val table = PdfPTable(2)
             table.widthPercentage = 100f
@@ -86,8 +86,9 @@ class GeneratePdf {
             throw e
         }
     }
+    private fun createCell(value: String): Phrase {
+        return Phrase(value)
+    }
 
 }
-fun createCell(value: String): Phrase {
-    return Phrase(value)
-}
+

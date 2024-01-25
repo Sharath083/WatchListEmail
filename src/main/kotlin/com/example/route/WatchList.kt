@@ -2,8 +2,8 @@ package com.example.route
 
 import com.example.model.*
 import com.example.plugins.UserSession
+import com.example.redis.getSession
 import com.example.service.*
-import com.example.utils.appconstants.ApiEndPoints
 import com.example.utils.appconstants.ApiEndPoints.CREATE_WATCHLIST
 import com.example.utils.appconstants.ApiEndPoints.DELETE_WATCHLIST
 import com.example.utils.appconstants.ApiEndPoints.UPDATE_WATCHLIST
@@ -23,9 +23,10 @@ fun Route.watchListRouting(){
             post(CREATE_WATCHLIST) {
 
 //                val details = call.receive<WatchlistData>()
+
                 watchListService.createWatchListService(
                     call.receive<WatchlistData>(),
-                    call.request.headers["Session"]!!.split("|")[1]
+                    call.getSession().second
                 ).apply {
                     call.respond(HttpStatusCode.Created, this)
                 }
@@ -35,7 +36,7 @@ fun Route.watchListRouting(){
 //                val details = call.receive<UpdateWatchList>()
                 watchListService.updateWatchListService(
                     call.receive<UpdateWatchList>(),
-                    call.request.headers["Session"]!!.split("|")[1]
+                    call.getSession().second
                 ).apply {
                     call.respond(HttpStatusCode.Accepted, this)
                 }
@@ -44,7 +45,7 @@ fun Route.watchListRouting(){
 //                val details = call.receive<DeleteWatchlist>()
                 watchListService.deleteWatchList(
                     call.receive<DeleteWatchlist>(),
-                    call.request.headers["Session"]!!.split("|")[1]
+                    call.getSession().second
                 ).apply {
                     call.respond(HttpStatusCode.OK, this)
                 }
@@ -62,9 +63,8 @@ fun Route.watchListRouting(){
             }
 
             get("/gmail") {
-                val uuid=call.request.headers["Session"]!!.split("|")[1]
-                GenerateGmail().generateEmailWithAttachment(uuid).apply {
-                    call.respond(HttpStatusCode.OK, "GMAIL SENT SUCCESSFULLY")
+                GenerateGmail().emailCheck(call.getSession().second).apply {
+                    call.respond(HttpStatusCode.OK, this)
                 }
             }
         }

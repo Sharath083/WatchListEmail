@@ -8,6 +8,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
+import org.koin.java.KoinJavaComponent.inject
 import redis.clients.jedis.Jedis
 
 fun ApplicationCall.getRequestHeader(key: String): String? {
@@ -17,21 +18,40 @@ fun ApplicationCall.getRequestHeader(key: String): String? {
 fun ApplicationCall.setResponseHeader(key: String, value: String) {
     this.response.header(key, value)
 }
-fun ApplicationCall.getSessionParameters(): String {
-    val sessionId = this.request.header("Header")?.trim()
-    if (sessionId.isNullOrEmpty()) {
-        throw CommonException("InfoMessage.INVALID_SESSION", HttpStatusCode.Unauthorized)
-    } else {
-        return sessionId
+fun ApplicationCall.getSession():Pair<String,String>{
+    val session= this.request.headers["Session"]
+    if(session.isNullOrEmpty()){
+        throw CommonException("INVALID_SESSION", HttpStatusCode.Unauthorized)
+    }
+    else{
+        return RedisHelper(RedisClient.jedis).validateSession(session)
     }
 }
-class RedisHelper(val redisClient: Jedis) {
+class RedisHelper(private val redisClient: Jedis) {
 
     fun set(key: String, value: Any) {
         val jsonString = Gson().toJson(value)
         redisClient.set(key, jsonString.trim())
     }
-    fun getString(key: String): String? {
-        return redisClient.get(key)
+    private fun String.getString(): String? {
+        return redisClient.get(this)
     }
+    fun delete(key: String):Long {
+        return redisClient.del(key)
+    }
+
+
+    fun validateSession(session: String):Pair<String,String>{
+        val key=session.split("|")
+        val s= key[0].getString()?.contains(key[1])
+        if(s!=null){
+            return Pair(key[0], key[1])
+        }
+        else{
+            throw CommonException("INVALID_SESSION OR SESSION HAS EXPIRED", HttpStatusCode.Unauthorized)
+        }
+    }
+
+
+
 }
