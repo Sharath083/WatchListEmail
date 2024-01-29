@@ -4,7 +4,7 @@ object EmailConstants {
     const val EMAIL_HOST = "smtp.gmail.com"
     const val EMAIL_PORT = 465
     const val ADMIN_MAIL = "sharath.r@marketsimplified.com"
-    const val ADMIN_PASS = "sharath@s38"
+    const val ADMIN_PASS = "***************"
 
     const val EMAIL_SUBJECT = "Sample Email with Attachment"
     const val EMAIL_MESSAGE = "Hi bro"
