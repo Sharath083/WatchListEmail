@@ -1,6 +1,5 @@
 package com.example.utils
 
-import com.example.config.DBConfig
 import com.example.database.table.RecentWatchList
 import com.example.database.table.User
 import com.example.database.table.WatchList

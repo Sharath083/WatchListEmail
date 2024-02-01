@@ -1,15 +1,9 @@
 package com.example.utils.helperfunctions
 
-
-import com.example.exceptions.InvalidEmailException
-import com.example.exceptions.InvalidEmailFormatException
-import com.example.exceptions.InvalidNameException
-import com.example.exceptions.InvalidPasswordException
 import com.example.model.Symbol
 import com.example.model.UpdateWatchList
 import com.example.model.UserRegistration
-import com.example.model.WatchlistData
-import io.ktor.http.*
+
 import io.ktor.server.plugins.requestvalidation.*
 import org.koin.core.component.KoinComponent
 

@@ -15,7 +15,6 @@ import org.koin.core.component.inject
 
 class UserLoginService: KoinComponent {
     private val userDaoImpl by inject<UserDaoImpl>()
-
     private val redisHelper by inject<RedisHelper>()
 
     suspend fun userLoginService(details: LoginData): UserResponse {
@@ -23,6 +22,7 @@ class UserLoginService: KoinComponent {
             val uuid = userDaoImpl.userLoginCheck(details)
             return when (uuid.isNotEmpty()) {
                 true -> {
+                    redisHelper.set(details.name, uuid)
                     UserResponse(uuid, HttpStatusCode.Created.toString())
                 }
                 else ->

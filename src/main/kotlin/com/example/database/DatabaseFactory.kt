@@ -1,7 +1,6 @@
 package com.example.database
 
-
-import com.example.config.DBConfig
+import com.example.config.EnvironmentVariables
 import com.example.database.table.RecentWatchList
 import com.example.database.table.User
 import com.example.database.table.WatchList
@@ -13,12 +12,14 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 
 object DatabaseFactory {
+    private val env=EnvironmentVariables.env
+
     fun init() {
         Database.connect(
-            url = DBConfig.url,
-            driver = DBConfig.driver,
-            user = DBConfig.user,
-            password = DBConfig.password
+            url = env.connectionUrl,
+            driver = env.driverClassName,
+            user = env.username,
+            password = env.password
         )
         transaction {
 //            SchemaUtils.drop(User, WatchList, RecentWatchList)

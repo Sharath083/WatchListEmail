@@ -18,6 +18,7 @@ fun ApplicationCall.getRequestHeader(key: String): String? {
 fun ApplicationCall.setResponseHeader(key: String, value: String) {
     this.response.header(key, value)
 }
+
 fun ApplicationCall.getSession():Pair<String,String>{
     val session= this.request.headers["Session"]
     if(session.isNullOrEmpty()){
@@ -27,11 +28,11 @@ fun ApplicationCall.getSession():Pair<String,String>{
         return RedisHelper(RedisClient.jedis).validateSession(session)
     }
 }
+
 class RedisHelper(private val redisClient: Jedis) {
 
-    fun set(key: String, value: Any) {
-        val jsonString = Gson().toJson(value)
-        redisClient.set(key, jsonString.trim())
+    fun set(key: String, value: String) {
+        redisClient.set(key, value)
     }
     private fun String.getString(): String? {
         return redisClient.get(this)

@@ -1,12 +1,8 @@
 package com.example.plugins
 
-import com.example.exceptions.InvalidEmailException
-import com.example.exceptions.InvalidEmailFormatException
-import com.example.exceptions.InvalidNameException
-import com.example.exceptions.InvalidPasswordException
+
 import com.example.model.*
 import com.example.utils.helperfunctions.HelperMethods
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 import org.koin.ktor.ext.inject

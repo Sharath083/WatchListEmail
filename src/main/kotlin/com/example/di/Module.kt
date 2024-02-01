@@ -14,7 +14,8 @@ import com.example.repository.RecentWatchListDaoImpl
 import com.example.service.WatchListService
 import com.example.service.UserServices
 import com.example.service.UserLoginService
-
+import com.example.service.PdfGenerationService
+import com.example.service.GmailGenerationService
 import com.example.service.RecentWatchListService
 
 
@@ -33,6 +34,8 @@ val myModule = module {
     singleOf(::RecentWatchListService)
     singleOf(::UserServices)
     singleOf(::UserLoginService)
+    singleOf(::GmailGenerationService)
+    singleOf(::PdfGenerationService)
     single<RedisHelper> { RedisHelper(RedisClient.jedis) }
     single<RedisSessionStorage> { RedisSessionStorage(RedisClient.jedis) }
     singleOf(::HelperMethods)

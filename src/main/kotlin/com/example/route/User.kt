@@ -8,6 +8,7 @@ import com.example.redis.setResponseHeader
 import com.example.service.UserLoginService
 import com.example.service.UserServices
 import com.example.utils.appconstants.ApiEndPoints.USER_LOGIN
+import com.example.utils.appconstants.ApiEndPoints.USER_LOGOUT
 import com.example.utils.appconstants.ApiEndPoints.USER_REGISTRATION
 import com.example.utils.appconstants.ApiEndPoints.USER_ROUTE
 import io.ktor.http.*
@@ -21,7 +22,6 @@ import org.koin.ktor.ext.inject
 fun Route.userRouting(){
     val userServices by inject<UserServices>()
     val userLoginService by inject<UserLoginService>()
-    val redisHelper by inject<RedisHelper>()
     route(USER_ROUTE){
         post(USER_REGISTRATION) {
             val details=call.receive<UserRegistration>()
@@ -32,12 +32,11 @@ fun Route.userRouting(){
         post(USER_LOGIN) {
             val details=call.receive<LoginData>()
             userLoginService.userLoginService(details).apply {
-                redisHelper.set(details.name, this.uuid)
                 call.setResponseHeader("Session", "${details.name}|${this.uuid}")
-                call.respond(HttpStatusCode.Created,this)
+                call.respond(HttpStatusCode.Created,"Logged in Successfully")
             }
         }
-        post("/logout") {
+        post(USER_LOGOUT) {
             userLoginService.userLogoutService(call.getSession().first).apply {
                 call.respond(HttpStatusCode.OK,this)
             }

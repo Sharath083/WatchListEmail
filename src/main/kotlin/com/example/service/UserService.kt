@@ -3,7 +3,6 @@ package com.example.service
 import com.example.exceptions.InvalidRegisterDetails
 import com.example.model.UserRegistration
 import com.example.model.UserResponse
-import com.example.redis.RedisPool
 import com.example.repository.UserDaoImpl
 import io.ktor.http.*
 import org.koin.core.component.KoinComponent

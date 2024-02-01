@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.config.EnvironmentVariables
 import com.example.database.DatabaseFactory
 import com.example.plugins.*
 import io.ktor.server.application.*
@@ -11,11 +12,12 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    EnvironmentVariables.getEnv(environment)
+    DatabaseFactory.init()
     configureKoin()
     configureSecurity()
     configureSerialization()
     configureRequestValidation()
     configureRouting()
-    DatabaseFactory.init()
     configureStatusPages()
 }
