@@ -35,8 +35,6 @@ class RedisSessionStorage(private val redisClient: Jedis) : SessionStorage {
 
     override suspend fun write(id: String, value: String) {
         try {
-            print(id +"              summu    $value            iuu                               ")
-
             redisClient[id] = value
             redisClient.expire(id, REDIS_TTL)
         } catch (connectionException: JedisConnectionException) {
